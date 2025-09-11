@@ -24,4 +24,4 @@ jobs:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           working-directory: ./apps/web
-          prod: true
+          vercel-args: '--prod'
