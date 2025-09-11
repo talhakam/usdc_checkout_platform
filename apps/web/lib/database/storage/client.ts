@@ -2,10 +2,10 @@
 // Goal: to handle file uploads, retrievals, and signed URL generation
 
 
-import { createClient } from '../database/universalClient'
+import { createClient } from '../client'
 
 export class StorageService {
-  private supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
+  private supabase = createClient()
 
 
   // Upload a file to a specified bucket
@@ -14,8 +14,11 @@ export class StorageService {
     file: File, 
     documentType: 'license' | 'identity' | 'tax'
   ) {
-    const fileExt = file.name.split('.').pop()
-    const fileName = `${documentType}-${Date.now()}.${fileExt}`
+    if (!file || !file.name) {
+      throw new Error('Invalid or missing file');
+    }
+    const fileExt = file.name.includes('.') ? file.name.split('.').pop() : ''
+    const fileName = fileExt ? `${documentType}-${Date.now()}.${fileExt}` : `${documentType}-${Date.now()}`
     const filePath = `${userId}/${fileName}`
 
     const { data, error } = await this.supabase.storage
