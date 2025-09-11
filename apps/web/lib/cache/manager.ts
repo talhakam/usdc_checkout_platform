@@ -45,7 +45,7 @@ export class CacheManager {
   }
 
   // Business-specific cache methods
-  static async cacheUser(userId: string, userData: any) {
+  static async cacheUser(userId: string, userData: unknown) {
     return this.set(
       CACHE_KEYS.USER(userId),
       userData,
@@ -57,7 +57,7 @@ export class CacheManager {
     return this.get(CACHE_KEYS.USER(userId));
   }
 
-  static async cacheMerchantData(merchantId: string, data: any) {
+  static async cacheMerchantData(merchantId: string, data: unknown) {
     return this.set(
       CACHE_KEYS.MERCHANT(merchantId),
       data,
