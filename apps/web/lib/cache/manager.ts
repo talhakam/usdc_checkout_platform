@@ -18,7 +18,7 @@ export class CacheManager {
 
   static async set(
     key: string,
-    value: any,
+    value: unknown,
     ttl: number = CACHE_DURATIONS.DEFAULT
   ): Promise<boolean> {
     try {
