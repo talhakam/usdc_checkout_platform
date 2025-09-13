@@ -1,5 +1,5 @@
 import { CacheManager } from './manager'
-import { CACHE_KEYS, CACHE_DURATIONS } from './keys'
+import { CACHE_DURATIONS } from './keys'
 
 export class CacheStrategies {
   // Cache-aside pattern
@@ -8,7 +8,7 @@ export class CacheStrategies {
     fetchFn: () => Promise<T>,
     ttl: number = CACHE_DURATIONS.DEFAULT
   ): Promise<T> {
-    let cached = await CacheManager.get<T>(key)
+    const cached = await CacheManager.get<T>(key)
     
     if (cached !== null) {
       return cached
@@ -33,7 +33,7 @@ export class CacheStrategies {
   // Cache with tags for bulk invalidation
   static async setWithTags(
     key: string,
-    value: any,
+    value: unknown,
     tags: string[],
     ttl: number = CACHE_DURATIONS.DEFAULT
   ) {
