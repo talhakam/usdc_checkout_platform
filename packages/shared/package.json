@@ -8,7 +8,9 @@
     "build": "tsc",
     "dev": "tsc --watch",
     "lint": "eslint src/",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "test": "echo 'No tests for shared package yet!'"
+    
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
