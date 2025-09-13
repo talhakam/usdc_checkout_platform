@@ -1,0 +1,32 @@
+name: Contracts Build & Test
+
+on:
+  push:
+    branches:
+      - contracts-dev
+  pull_request:
+    branches:
+      - contracts-dev
+
+jobs:
+  build-and-test-contracts:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/contracts
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - name: Install dependencies
+        run: pnpm install
+      - name: Compile smart contracts
+        run: npx hardhat compile
+      - name: Test smart contracts
+        run: npx hardhat test
