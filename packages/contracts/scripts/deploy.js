@@ -8,20 +8,22 @@ async function main() {
   // Deploy Mock USDC
   const MockUSDC = await hre.ethers.getContractFactory("MockUSDC");
   const usdc = await MockUSDC.deploy();
-  await usdc.deployed();
-  console.log("MockUSDC deployed to:", usdc.address);
+  await usdc.waitForDeployment();
+  const usdcAddress = await usdc.getAddress(); // <-- Correct way
+  console.log("MockUSDC deployed to:", usdcAddress);
 
   // Deploy PaymentHub
   const feeAccount = deployer.address;
   const Hub = await hre.ethers.getContractFactory("USDCPaymentHub");
-  const hub = await Hub.deploy(usdc.address, feeAccount, 200); // 2% fee
-  await hub.deployed();
-  console.log("USDCPaymentHub deployed to:", hub.address);
+  const hub = await Hub.deploy(usdcAddress, feeAccount, 200); // 2% fee
+  await hub.waitForDeployment();
+  const hubAddress = await hub.getAddress(); // <-- Correct way
+  console.log("USDCPaymentHub deployed to:", hubAddress);
 
   // Save deployments
   const deployments = {
-    MockUSDC: usdc.address,
-    USDCPaymentHub: hub.address,
+    MockUSDC: usdcAddress,
+    USDCPaymentHub: hubAddress,
     network: hre.network.name,
   };
   fs.writeFileSync("deployments.json", JSON.stringify(deployments, null, 2));
