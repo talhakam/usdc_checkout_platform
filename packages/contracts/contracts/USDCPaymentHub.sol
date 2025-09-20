@@ -32,6 +32,7 @@ contract USDCPaymentHub is AccessControl, Pausable, ReentrancyGuard {
         address merchant;      // merchant who received funds
         uint128 grossAmount;   // total amount consumer paid (fits 128 for typical fiat scaled amounts)
         uint128 merchantAmount; // amount merchant received (gross - fee)
+        uint128 refundedAmount; // amount refunded so far (sum of refunds)
         uint32  timestamp;     // block timestamp of processing
         bool    processed;     // payment processed
         bool    refunded;      // refunded flag
@@ -69,6 +70,7 @@ contract USDCPaymentHub is AccessControl, Pausable, ReentrancyGuard {
     error RefundNotRequested();
     error NotPaymentConsumer();
     error NotPaymentMerchant();
+    error RefundAmountTooHigh();
 
     /// Constructor
     /// @param _usdc ERC20 token address (mock or real)
@@ -189,7 +191,6 @@ contract USDCPaymentHub is AccessControl, Pausable, ReentrancyGuard {
         if (!p.processed) revert PaymentNotProcessed();
         if (p.consumer != msg.sender) revert NotPaymentConsumer();
         if (p.refunded) revert AlreadyRefunded();
-
         refundRequested[paymentId] = true;
         emit RefundRequested(paymentId, msg.sender, reason);
     }
@@ -206,10 +207,23 @@ contract USDCPaymentHub is AccessControl, Pausable, ReentrancyGuard {
         if (!refundRequested[paymentId]) revert RefundNotRequested();
         if (msg.sender != p.merchant) revert NotPaymentMerchant();
 
-        // mark refunded first to prevent double refunds
-        p.refunded = true;
+        if (amount == 0) revert InvalidAmount();
 
+        // merchant can only refund up to the amount they originally received minus already refunded
+        uint256 remainingMerchantRefundable = uint256(p.merchantAmount) - uint256(p.refundedAmount);
+        if (amount > remainingMerchantRefundable) revert RefundAmountTooHigh();
+
+        // perform transfer (merchant must have approved hub)
         usdc.safeTransferFrom(msg.sender, p.consumer, amount);
+
+        // update refunded tracking
+        p.refundedAmount = uint128(uint256(p.refundedAmount) + amount);
+        // mark fully refunded when merchant has refunded their full merchantAmount
+        if (p.refundedAmount >= p.merchantAmount) {
+            p.refunded = true;
+            // clear request marker
+            refundRequested[paymentId] = false;
+        }
 
         emit RefundIssued(paymentId, msg.sender, p.consumer, amount);
     }
@@ -225,10 +239,26 @@ contract USDCPaymentHub is AccessControl, Pausable, ReentrancyGuard {
         if (p.refunded) revert AlreadyRefunded();
         if (!refundRequested[paymentId]) revert RefundNotRequested();
 
-        // mark refunded first
-        p.refunded = true;
+        if (amount == 0) revert InvalidAmount();
 
+        // admin may refund up to the remaining gross amount minus already refunded
+        uint256 remainingGrossRefundable = uint256(p.grossAmount) - uint256(p.refundedAmount);
+        if (amount > remainingGrossRefundable) revert RefundAmountTooHigh();
+
+        // perform transfer (admin must have approved hub)
         usdc.safeTransferFrom(msg.sender, p.consumer, amount);
+
+        // update refunded tracking
+        p.refundedAmount = uint128(uint256(p.refundedAmount) + amount);
+        // mark fully refunded when refundedAmount reaches grossAmount
+        if (p.refundedAmount >= p.grossAmount) {
+            p.refunded = true;
+        }
+
+        // clear request if fully refunded or keep it for partial refunds
+        if (p.refunded) {
+            refundRequested[paymentId] = false;
+        }
 
         emit RefundIssued(paymentId, msg.sender, p.consumer, amount);
     }
@@ -261,11 +291,12 @@ contract USDCPaymentHub is AccessControl, Pausable, ReentrancyGuard {
         address merchant,
         uint256 grossAmount,
         uint256 merchantAmount,
+        uint256 refundedAmount,
         uint32 timestamp,
         bool processed,
         bool refunded
     ) {
         PaymentInfo storage p = payments[paymentId];
-        return (p.consumer, p.merchant, p.grossAmount, p.merchantAmount, p.timestamp, p.processed, p.refunded);
+        return (p.consumer, p.merchant, p.grossAmount, p.merchantAmount, p.refundedAmount, p.timestamp, p.processed, p.refunded);
     }
 }
