@@ -1,6 +1,14 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import Providers from "./providers";
+import "@rainbow-me/rainbowkit/styles.css";
+import Header from "../components/Header";
+import dynamic from "next/dynamic";
+
+// load the wallet connect button only on the client to avoid injecting
+// runtime styles into server-rendered markup (prevents hydration mismatch)
+const WalletConnectButton = dynamic(() => import("../components/WalletConnectButton"), { ssr: false });
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -25,10 +33,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        {/* Wrap the whole app in Providers so Wagmi/RainbowKit context is available throughout */}
+        <Providers>
+          <Header>
+            <WalletConnectButton />
+          </Header>
+
+          {children}
+        </Providers>
       </body>
     </html>
   );
