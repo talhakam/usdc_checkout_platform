@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Card from "./ui/Card";
 import Modal from "./ui/Modal";
 import { createClient } from "../lib/database/createClientComponent";
@@ -9,6 +9,10 @@ import { MockUSDCAbi, USDCPaymentHubAbi } from "../src/abis/contracts";
 import { keccak256, parseUnits } from "viem";
 
 const supabase = createClient();
+
+interface MerchantRow { id: string; name: string; wallet: string; store_url?: string | null; isRegistered?: boolean }
+interface PaymentRow { payment_id: string; merchant_wallet: string; total_amount: number; status?: string }
+interface RefundRow { id: string; payment_id: string; refund_amount: number; status?: string }
 
 function randomPaymentId(merchant: string, customer: string) {
   // use keccak256 over current time + wallets for a reasonably unique id
@@ -21,13 +25,13 @@ export default function CustomerDashboard() {
   const publicClient = usePublicClient();
   const { data: walletClient } = useWalletClient();
 
-  const [merchants, setMerchants] = useState<any[]>([]);
-  const [payments, setPayments] = useState<any[]>([]);
-  const [refunds, setRefunds] = useState<any[]>([]);
+  const [merchants, setMerchants] = useState<MerchantRow[]>([]);
+  const [payments, setPayments] = useState<PaymentRow[]>([]);
+  const [refunds, setRefunds] = useState<RefundRow[]>([]);
   const [mockBalance, setMockBalance] = useState<string>("0.000000");
   const [balanceLoading, setBalanceLoading] = useState(false);
 
-  const [selectedMerchant, setSelectedMerchant] = useState<any | null>(null);
+  const [selectedMerchant, setSelectedMerchant] = useState<MerchantRow | null>(null);
   const [checkoutAmount, setCheckoutAmount] = useState<string>("1.0");
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -36,15 +40,15 @@ export default function CustomerDashboard() {
     // load merchants from supabase
     (async () => {
       const { data } = await supabase.from("merchants").select("id,name,wallet,store_url,isRegistered").eq("isRegistered", true);
-      if (data) setMerchants(data as any[]);
+      if (data) setMerchants(data as MerchantRow[]);
     })();
 
     // load refund requests for the current customer (server: refund_requests table)
-    (async () => {
-      if (!address) return;
-      const { data } = await supabase.from("refund_requests").select("id,payment_id,refund_amount,status,created_at").eq("consumer_wallet", address);
-      if (data) setRefunds(data as any[]);
-    })();
+      (async () => {
+        if (!address) return;
+        const { data } = await supabase.from("refund_requests").select("id,payment_id,refund_amount,status,created_at").eq("consumer_wallet", address);
+        if (data) setRefunds(data as RefundRow[]);
+      })();
   }, [address]);
 
   useEffect(() => {
@@ -53,10 +57,10 @@ export default function CustomerDashboard() {
       if (!address || !publicClient) return;
       try {
         setBalanceLoading(true);
-        const mockAddress = (window as any).deployments?.MockUSDC || "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+  const mockAddress = ((window as unknown as { deployments?: Record<string, string> }).deployments?.MockUSDC) || "0x5FbDB2315678afecb367f032d93F642f64180aa3";
         // get raw balance (uint256)
         const raw = await publicClient.readContract({
-          address: mockAddress as any,
+          address: mockAddress as `0x${string}`,
           abi: MockUSDCAbi,
           functionName: "balanceOf",
           args: [address],
@@ -65,7 +69,7 @@ export default function CustomerDashboard() {
         // MockUSDC uses 6 decimals
         const decimals = 6;
         // raw may be a bigint
-        const value = typeof raw === 'bigint' ? raw : BigInt(raw as any);
+  const value = typeof raw === 'bigint' ? raw : BigInt(String(raw));
         const human = Number(value) / 10 ** decimals;
         setMockBalance(human.toFixed(decimals));
       } catch (err) {
@@ -82,13 +86,13 @@ export default function CustomerDashboard() {
       if (!address) return;
       // try to get orders from supabase orders table
       const { data } = await supabase.from("orders").select("payment_id,merchant_wallet,total_amount,status,created_at").eq("consumer_wallet", address);
-      if (data) setPayments(data as any[]);
+      if (data) setPayments(data as PaymentRow[]);
     })();
   }, [address]);
 
   // mockBalance state is populated from chain
 
-  async function handleOpenCheckout(merchant: any) {
+  async function handleOpenCheckout(merchant: { id: string; name: string; wallet: string }) {
     setSelectedMerchant(merchant);
     setCheckoutOpen(true);
   }
@@ -101,23 +105,23 @@ export default function CustomerDashboard() {
       const amount = parseUnits(checkoutAmount, 6); // MockUSDC uses 6 decimals
 
       // 1) approve MockUSDC
-      const mockAddress = (window as any).deployments?.MockUSDC || "0x5FbDB2315678afecb367f032d93F642f64180aa3";
-      const hubAddress = (window as any).deployments?.USDCPaymentHub || "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
+  const mockAddress = ((window as unknown as { deployments?: Record<string, string> }).deployments?.MockUSDC) || "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+  const hubAddress = ((window as unknown as { deployments?: Record<string, string> }).deployments?.USDCPaymentHub) || "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
 
-      await walletClient.writeContract({
-        address: mockAddress as any,
-        abi: MockUSDCAbi,
+      await (walletClient as unknown as { writeContract: (...args: unknown[]) => Promise<unknown> }).writeContract({
+        address: mockAddress as `0x${string}`,
+        abi: MockUSDCAbi as unknown[],
         functionName: "approve",
-        args: [hubAddress, amount],
+        args: [hubAddress as `0x${string}`, amount],
         chain: null,
       });
 
       // 2) call checkout on hub
-      await walletClient.writeContract({
-        address: hubAddress as any,
-        abi: USDCPaymentHubAbi,
+      await (walletClient as unknown as { writeContract: (...args: unknown[]) => Promise<unknown> }).writeContract({
+        address: hubAddress as `0x${string}`,
+        abi: USDCPaymentHubAbi as unknown[],
         functionName: "checkout",
-        args: [paymentId as any, selectedMerchant.wallet, amount],
+        args: [paymentId as `0x${string}`, selectedMerchant.wallet as `0x${string}`, amount],
         chain: null,
       });
 
@@ -128,16 +132,18 @@ export default function CustomerDashboard() {
         body: JSON.stringify({ payment_id: paymentId, consumer_wallet: address, merchant_wallet: selectedMerchant.wallet, total_amount: Number(checkoutAmount) }),
       });
 
-      if (!res.ok) throw new Error("Failed to record order");
+  if (!res.ok) throw new Error("Failed to record order");
 
       // refresh payments
       const { data } = await supabase.from("orders").select("payment_id,merchant_wallet,total_amount,status,created_at").eq("consumer_wallet", address);
-      if (data) setPayments(data as any[]);
+      if (data) setPayments(data as any[]); // eslint-disable-line @typescript-eslint/no-explicit-any -- supabase typing issue
+
+      alert("Checkout successful!");
 
       setCheckoutOpen(false);
     } catch (err) {
       console.error(err);
-      alert((err as any)?.message || "Checkout failed");
+      alert((err as any)?.message || "Checkout failed"); // eslint-disable-line @typescript-eslint/no-explicit-any -- err typing
     } finally {
       setLoading(false);
     }

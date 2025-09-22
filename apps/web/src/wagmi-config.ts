@@ -1,51 +1,51 @@
-import { createConfig, http, type Transport } from "wagmi";
-import { localhost } from "wagmi/chains";
+import { http, createConfig } from "wagmi";
 
-// Keep config simple and aligned with wagmi docs.
-// Read an optional AMOY RPC from env to add a custom test chain.
-const AMOY_RPC = typeof process !== "undefined" ? (process.env.NEXT_PUBLIC_ALCHEMY_AMOY_URL || process.env.ALCHEMY_AMOY_URL || "") : "";
-const AMOY_CHAIN_ID = typeof process !== "undefined" ? Number(process.env.NEXT_PUBLIC_ALCHEMY_AMOY_CHAIN_ID || process.env.ALCHEMY_AMOY_CHAIN_ID || 137) : 137;
+// ENV for Polygon Amoy
+const AMOY_RPC =
+  process.env.NEXT_PUBLIC_ALCHEMY_AMOY_URL ||
+  process.env.ALCHEMY_AMOY_URL ||
+  "";
+const AMOY_CHAIN_ID = 80002; // Polygon Amoy testnet
 
-const baseChains = [localhost] as const;
+// Local Hardhat chain (1337)
+const localhost = {
+  id: 1337,
+  name: "Local Hardhat",
+  network: "hardhat",
+  nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+  rpcUrls: {
+    default: { http: ["http://127.0.0.1:8545"] },
+    public: { http: ["http://127.0.0.1:8545"] },
+  },
+  testnet: true,
+} as const;
 
-// exportedChains should be a readonly array of chains compatible with wagmi
-let exportedChains: readonly (typeof localhost | {
-  id: number;
-  name: string;
-  network: string;
-  nativeCurrency: { name: string; symbol: string; decimals: number };
-  rpcUrls: { default: { http: string[] }; public: { http: string[] } };
-  testnet: boolean;
-})[] = baseChains as any;
+// Polygon Amoy (manual definition)
+const polygonAmoy = {
+  id: AMOY_CHAIN_ID,
+  name: "Polygon Amoy",
+  network: "amoy",
+  nativeCurrency: { name: "MATIC", symbol: "MATIC", decimals: 18 },
+  rpcUrls: {
+    default: { http: [AMOY_RPC] },
+    public: { http: [AMOY_RPC] },
+  },
+  testnet: true,
+} as const;
+
+// Chains we support
+export const chains = [localhost, polygonAmoy] as const;
+
+// Transport mapping (use any for typing to avoid depending on wagmi's exact exported types)
+export const transports: Record<number, any> = { // eslint-disable-line @typescript-eslint/no-explicit-any -- wagmi typing mismatch workaround
+  [localhost.id]: http("http://127.0.0.1:8545"),
+};
 if (AMOY_RPC) {
-  const amoyChain = {
-    id: AMOY_CHAIN_ID,
-    name: "Polygon Amoy",
-    network: "amoy",
-    nativeCurrency: { name: "MATIC", symbol: "MATIC", decimals: 18 },
-    rpcUrls: { default: { http: [AMOY_RPC].slice() }, public: { http: [AMOY_RPC].slice() } },
-    testnet: false,
-  };
-  exportedChains = [...baseChains, amoyChain];
+  transports[polygonAmoy.id] = http(AMOY_RPC);
 }
 
-// transports: simple mapping from chainId -> http transport
-const transports: Record<number, Transport> = {};
-// local hardhat/ganache default
-transports[1337] = http("http://127.0.0.1:8545");
-if (AMOY_RPC) transports[AMOY_CHAIN_ID] = http(AMOY_RPC);
 
 export const config = createConfig({
-  chains: exportedChains as any,
-  transports,
+  chains: chains as unknown as readonly [any, ...any[]], // eslint-disable-line @typescript-eslint/no-explicit-any -- wagmi typing mismatch workaround
+  transports: transports as any,
 });
-
-// Type declaration merging so wagmi hooks can infer our config types when used
-declare module "wagmi" {
-  interface Register {
-    config: typeof config;
-  }
-}
-
-export { exportedChains as chains };
-export default config;

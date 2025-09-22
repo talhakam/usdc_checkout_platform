@@ -4,7 +4,9 @@ require("@nomicfoundation/hardhat-toolbox");
 const { PRIVATE_KEY, ALCHEMY_AMOY_URL } = process.env;
 
 const networks = {
-  hardhat: {}
+  hardhat: {
+    chainId: 1337
+  }
 };
 
 // Only add when the ALCHEMY_AMOY_URL env var is set.

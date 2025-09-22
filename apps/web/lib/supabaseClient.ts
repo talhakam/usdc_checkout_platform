@@ -1,12 +1,14 @@
 "use client";
 
-// Ensure the path is correct and the module exists
+// Use the shared universal client which is typed with the Database interface
 import { createClient as createSharedClient } from '@shared/database/universalClient';
+import type { Database } from '@shared/types/types'
+import type { SupabaseClient } from '@supabase/supabase-js'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? '';
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '';
 
-// createSharedClient returns a typed client; we keep the type loose here for simplicity
-const supabase = createSharedClient(supabaseUrl, supabaseKey) as any;
+// createSharedClient returns SupabaseClient<Database>
+const supabase = createSharedClient(supabaseUrl, supabaseKey) as SupabaseClient<Database>;
 
 export default supabase;

@@ -57,12 +57,12 @@ describe("USDCPaymentHub MVP", function () {
   const ADMIN_ROLE = await hub.ADMIN_ROLE();
   await hub.connect(deployer).grantRole(ADMIN_ROLE, admin.address);
 
-    // Mint tokens for consumer
-    await mockUsdc.faucet(consumer.address, ethers.parseUnits("1000", 18));
+  // Mint tokens for consumer
+  await mockUsdc.faucet(consumer.address, ethers.parseUnits("1000", 6));
   });
 
   it("should allow checkout and distribute funds", async function () {
-    const netAmount = ethers.parseUnits("100", 18);
+  const netAmount = ethers.parseUnits("100", 6);
     const paymentId = ethers.keccak256(ethers.toUtf8Bytes("order-1"));
     const hubAddress = await hub.getAddress();
 
@@ -76,12 +76,12 @@ describe("USDCPaymentHub MVP", function () {
     // Balances check
     const merchantBal = await mockUsdc.balanceOf(merchant.address);
     const feeBal = await mockUsdc.balanceOf(feeAccount.address);
-    expect(merchantBal).to.equal(ethers.parseUnits("98", 18));
-    expect(feeBal).to.equal(ethers.parseUnits("2", 18));
+  expect(merchantBal).to.equal(ethers.parseUnits("98", 6));
+  expect(feeBal).to.equal(ethers.parseUnits("2", 6));
   });
 
   it("should prevent duplicate paymentId", async function () {
-    const netAmount = ethers.parseUnits("50", 18);
+  const netAmount = ethers.parseUnits("50", 6);
     const paymentId = ethers.keccak256(ethers.toUtf8Bytes("dup-test"));
     const hubAddress = await hub.getAddress();
 
@@ -95,7 +95,7 @@ describe("USDCPaymentHub MVP", function () {
   });
 
   it("should allow consumer to request refund", async function () {
-    const netAmount = ethers.parseUnits("60", 18);
+  const netAmount = ethers.parseUnits("60", 6);
     const paymentId = ethers.keccak256(ethers.toUtf8Bytes("refund-req"));
     const hubAddress = await hub.getAddress();
 
@@ -111,7 +111,7 @@ describe("USDCPaymentHub MVP", function () {
   });
 
   it("should allow merchant to issue refund", async function () {
-    const amount = ethers.parseUnits("80", 18);
+  const amount = ethers.parseUnits("80", 6);
     const feeBps = 200n; // 2%
     const merchantAmount = amount - (amount * feeBps) / 10000n; // merchant nets after fee
     const paymentId = ethers.keccak256(ethers.toUtf8Bytes("merchant-refund"));
@@ -134,7 +134,7 @@ describe("USDCPaymentHub MVP", function () {
   });
 
   it("should allow admin to issue refund", async function () {
-    const netAmount = ethers.parseUnits("90", 18);
+  const netAmount = ethers.parseUnits("90", 6);
     const paymentId = ethers.keccak256(ethers.toUtf8Bytes("admin-refund"));
     const hubAddress = await hub.getAddress();
 
@@ -165,8 +165,8 @@ describe("USDCPaymentHub MVP", function () {
   it("should revert checkout to unregistered merchant", async function () {
     const paymentId = ethers.keccak256(ethers.toUtf8Bytes("not-merchant"));
     // use admin (not registered as merchant) as recipient
-    await mockUsdc.connect(consumer).approve(await hub.getAddress(), ethers.parseUnits("10", 18));
-    await expect(hub.connect(consumer).checkout(paymentId, admin.address, ethers.parseUnits("10", 18)))
+  await mockUsdc.connect(consumer).approve(await hub.getAddress(), ethers.parseUnits("10", 6));
+  await expect(hub.connect(consumer).checkout(paymentId, admin.address, ethers.parseUnits("10", 6)))
       .to.be.revertedWithCustomError(hub, "NotMerchant");
   });
 
@@ -176,17 +176,17 @@ describe("USDCPaymentHub MVP", function () {
     // Sanity: ensure contract reports paused state
     expect(await hub.paused()).to.equal(true);
 
-    await mockUsdc.connect(consumer).approve(await hub.getAddress(), ethers.parseUnits("10", 18));
+  await mockUsdc.connect(consumer).approve(await hub.getAddress(), ethers.parseUnits("10", 6));
     // Expect a revert due to paused state. Use a generic revert assertion to avoid
     // brittle dependence on the exact revert string (varies by OZ version).
-    await expect(hub.connect(consumer).checkout(paymentId, merchant.address, ethers.parseUnits("10", 18)))
+  await expect(hub.connect(consumer).checkout(paymentId, merchant.address, ethers.parseUnits("10", 6)))
       .to.be.reverted;
 
     await hub.connect(deployer).unpause();
   });
 
   it("should revert requestRefund when called by non-consumer", async function () {
-    const amount = ethers.parseUnits("20", 18);
+  const amount = ethers.parseUnits("20", 6);
     const paymentId = ethers.keccak256(ethers.toUtf8Bytes("req-non-consumer"));
     await mockUsdc.connect(consumer).approve(await hub.getAddress(), amount);
     await hub.connect(consumer).checkout(paymentId, merchant.address, amount);
@@ -197,7 +197,7 @@ describe("USDCPaymentHub MVP", function () {
   });
 
   it("should revert merchantRefund when refund not requested", async function () {
-    const amount = ethers.parseUnits("30", 18);
+  const amount = ethers.parseUnits("30", 6);
     const paymentId = ethers.keccak256(ethers.toUtf8Bytes("no-refund-request"));
     await mockUsdc.connect(consumer).approve(await hub.getAddress(), amount);
     await hub.connect(consumer).checkout(paymentId, merchant.address, amount);
@@ -208,7 +208,7 @@ describe("USDCPaymentHub MVP", function () {
   });
 
   it("should revert adminRefund when refund not requested", async function () {
-    const amount = ethers.parseUnits("35", 18);
+  const amount = ethers.parseUnits("35", 6);
     const paymentId = ethers.keccak256(ethers.toUtf8Bytes("admin-no-request"));
     await mockUsdc.connect(consumer).approve(await hub.getAddress(), amount);
     await hub.connect(consumer).checkout(paymentId, merchant.address, amount);
@@ -219,7 +219,7 @@ describe("USDCPaymentHub MVP", function () {
   });
 
   it("should prevent double refunds", async function () {
-    const amount = ethers.parseUnits("40", 18);
+  const amount = ethers.parseUnits("40", 6);
     const feeBps = 200n;
     const merchantAmount = amount - (amount * feeBps) / 10000n;
     const paymentId = ethers.keccak256(ethers.toUtf8Bytes("double-refund"));
@@ -243,10 +243,10 @@ describe("USDCPaymentHub MVP", function () {
   });
 
   it("computeFeeAndNet returns correct values", async function () {
-    const amount = ethers.parseUnits("100", 18);
-    const [fee, net] = await hub.computeFeeAndNet(amount);
-    expect(fee).to.equal(ethers.parseUnits("2", 18));
-    expect(net).to.equal(ethers.parseUnits("98", 18));
+  const amount = ethers.parseUnits("100", 6);
+  const [fee, net] = await hub.computeFeeAndNet(amount);
+  expect(fee).to.equal(ethers.parseUnits("2", 6));
+  expect(net).to.equal(ethers.parseUnits("98", 6));
   });
 });
 // npx hardhat test test/USDCPaymentHub.test.js --network hardhat

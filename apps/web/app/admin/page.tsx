@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useAccount, usePublicClient } from "wagmi";
 import { keccak256 } from "viem";
-import Header from "../../components/Header";
+// Header was imported earlier but not required in this page — keep layout minimal
 import Link from "next/link";
 import AdminDashboard from "../../components/AdminDashboard";
 import Container from "../../components/ui/Container";
@@ -43,7 +43,7 @@ export default function AdminPage() {
         const adminRole = keccak256(encoder.encode('ADMIN_ROLE')) as `0x${string}`;
         console.debug('computed adminRole', adminRole);
 
-        const hasRoleAbi = Hub_hasRole ? [Hub_hasRole] : (USDCPaymentHubAbi as any);
+  const hasRoleAbi = Hub_hasRole ? [Hub_hasRole] : (USDCPaymentHubAbi as unknown as object[]);
 
         const hasRaw = await publicClient.readContract({
           address: hubAddress,

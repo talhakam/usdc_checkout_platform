@@ -13,4 +13,9 @@ contract MockUSDC is ERC20 {
     function faucet(address to, uint256 amount) external {
         _mint(to, amount);
     }
+
+    // Mock USDC uses 6 decimals like real USDC
+    function decimals() public pure override returns (uint8) {
+        return 6;
+    }
 }

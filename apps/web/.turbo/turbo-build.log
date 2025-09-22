@@ -8,23 +8,31 @@
    Creating an optimized production build ...
  ✓ Compiled successfully
    Linting and checking validity of types ...
-   Collecting page data ...
-   Generating static pages (0/5) ...
-   Generating static pages (1/5) 
-   Generating static pages (2/5) 
-   Generating static pages (3/5) 
- ✓ Generating static pages (5/5)
-   Finalizing page optimization ...
-   Collecting build traces ...
 
-Route (app)                              Size     First Load JS
-┌ ○ /                                    138 B          87.2 kB
-└ ○ /_not-found                          870 B          87.9 kB
-+ First Load JS shared by all            87.1 kB
-  ├ chunks/102-cc8290e9a622e80d.js       31.6 kB
-  ├ chunks/2fd790f8-2d535cc32bbb8129.js  53.6 kB
-  └ other shared chunks (total)          1.86 kB
+Failed to compile.
 
+./app/api/orders/route.ts
+13:20  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+14:82  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
 
-○  (Static)  prerendered as static content
+./app/merchant/register/page.tsx
+10:37  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+10:55  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+10:72  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+97:88  Error: `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`.  react/no-unescaped-entities
 
+./components/AdminDashboard.tsx
+12:10  Error: 'Hub_MERCHANT_ROLE' is defined but never used.  @typescript-eslint/no-unused-vars
+185:36  Error: 'e' is defined but never used.  @typescript-eslint/no-unused-vars
+199:29  Error: 'foundEvent' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./components/CustomerDashboard.tsx
+63:35  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+139:37  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+144:21  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/wagmi-config.ts
+32:29  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/basic-features/eslint#disabling-rules
+ ELIFECYCLE  Command failed with exit code 1.

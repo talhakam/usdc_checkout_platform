@@ -26,7 +26,72 @@ export interface Database {
           display_name?: string | null
         }
       }
-      // ... other tables
+      merchants: {
+        Row: {
+          id: string
+          name: string
+          wallet: string
+          store_url: string | null
+          kyc_url: string | null
+          isRegistered: boolean
+          created_at: string | null
+        }
+        Insert: {
+          id?: string
+          name: string
+          wallet: string
+          store_url?: string | null
+          kyc_url?: string | null
+          isRegistered?: boolean
+        }
+        Update: {
+          name?: string
+          wallet?: string
+          store_url?: string | null
+          kyc_url?: string | null
+          isRegistered?: boolean
+        }
+      }
+      orders: {
+        Row: {
+          id: string
+          payment_id: string
+          consumer_wallet: string
+          merchant_wallet: string
+          total_amount: number
+          status: string
+          created_at: string | null
+        }
+        Insert: {
+          payment_id: string
+          consumer_wallet: string
+          merchant_wallet: string
+          total_amount: number
+          status?: string
+        }
+        Update: {
+          status?: string
+        }
+      }
+      refund_requests: {
+        Row: {
+          id: string
+          payment_id: string
+          consumer_wallet: string
+          refund_amount: number
+          status: string
+          created_at: string | null
+        }
+        Insert: {
+          payment_id: string
+          consumer_wallet: string
+          refund_amount: number
+          status?: string
+        }
+        Update: {
+          status?: string
+        }
+      }
     }
   }
 }

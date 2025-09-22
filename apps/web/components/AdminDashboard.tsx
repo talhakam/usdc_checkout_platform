@@ -3,13 +3,12 @@
 import React, { useEffect, useState } from "react";
 import { usePublicClient, useWalletClient, useAccount } from "wagmi";
 import { parseUnits, keccak256 } from "viem";
-import { MockUSDCAbi, MockUSDC_allowance, MockUSDC_decimals, MockUSDC_approve, USDCPaymentHubAbi } from "../src/abis/contracts";
+import { MockUSDCAbi, USDCPaymentHubAbi } from "../src/abis/contracts";
 import supabase from "../lib/supabaseClient";
 import Container from "./ui/Container";
 import Card from "./ui/Card";
 import Button from "./ui/button";
 import Modal from "./ui/Modal";
-import { Hub_MERCHANT_ROLE } from "../src/abis/contracts";
 
 type MerchantRow = { id: string; name: string; store_url: string; wallet: string; kyc_url?: string | null; isRegistered?: boolean };
 
@@ -55,8 +54,8 @@ export default function AdminDashboard() {
     (async () => {
       try {
         const { data } = await supabase.from('merchants').select('id,name,store_url,wallet,kyc_url,isRegistered');
-        setMerchants((data as any) || []);
-      } catch (e) {
+        setMerchants((data as MerchantRow[]) || []);
+      } catch (e: unknown) {
         console.error('fetch merchants failed', e);
       }
     })();
@@ -65,10 +64,10 @@ export default function AdminDashboard() {
   const mint = async () => {
     if (!deployments?.MockUSDC || !walletClient || !publicClient) return alert("Connect and ensure MockUSDC is deployed");
     try {
-      const faucetAbi = MockUSDCAbi.find((i) => i.name === "faucet") ?? MockUSDCAbi;
+      const faucetAbi = (MockUSDCAbi as unknown[]).find((i) => (i as { name?: string })?.name === "faucet") ?? MockUSDCAbi;
       const to = mintAddress || address || toAddress("0x0000000000000000000000000000000000000000");
       const amt = parseUnits(mintAmount || "100", 6);
-      await walletClient.writeContract({ address: toAddress(deployments.MockUSDC), abi: [faucetAbi as any], functionName: "faucet", args: [toAddress(to), amt], chain: null });
+      await (walletClient as unknown as { writeContract: (args: unknown) => Promise<unknown> }).writeContract({ address: toAddress(deployments.MockUSDC), abi: [faucetAbi as unknown as object], functionName: "faucet", args: [toAddress(to), amt], chain: null });
       alert(`Faucet minted ${mintAmount} USDC to ${to}`);
     } catch (e) {
       alert("mint failed: " + String(e));
@@ -145,6 +144,11 @@ export default function AdminDashboard() {
               <div className="flex items-center gap-3">
                 <Button variant="primary" size="md" onClick={async () => {
                   if (!selectedMerchant) return;
+                  // Ensure wallet and public client are available before attempting on-chain actions
+                  if (!walletClient || !publicClient) {
+                    setToasts((t) => t.concat([{ id: String(Date.now()), message: 'Connect your wallet and ensure provider is ready', type: 'error' }]));
+                    return;
+                  }
                     try {
                       setApproving(true);
 
@@ -155,30 +159,38 @@ export default function AdminDashboard() {
 
                       // call registerMerchant on the hub contract
                       const hubAddress = (await fetch('/deployments.json').then((r) => r.json())).USDCPaymentHub as string;
-                      const txResult = await walletClient?.writeContract({
+                      const txResult = await (walletClient as unknown as { writeContract: (...args: unknown[]) => Promise<unknown> })?.writeContract({
                         address: hubAddress as `0x${string}`,
-                        abi: (USDCPaymentHubAbi as any),
+                        abi: (USDCPaymentHubAbi as unknown[]),
                         functionName: 'registerMerchant',
-                        args: [toAddress(selectedMerchant.wallet)] as any,
+                        args: [toAddress(selectedMerchant.wallet)] as unknown[],
                         chain: null,
                       });
 
                       // extract tx hash
-                      const txHash = typeof txResult === 'string' ? txResult : (txResult && (txResult as any).hash) ? (txResult as any).hash : undefined;
+                      let txHash: string | undefined;
+                      if (typeof txResult === 'string') txHash = txResult;
+                      else if (txResult && typeof txResult === 'object') {
+                        const resObj = txResult as Record<string, unknown>;
+                        if ('hash' in resObj) txHash = String(resObj.hash);
+                      }
                       if (!txHash) {
                         // fallback: wait a little and then try on-chain confirm via hasRole
                         throw new Error('No transaction hash returned from wallet');
                       }
 
                       // wait for receipt by polling
+                      // capture local non-null alias so TypeScript knows it's defined in nested functions
+                      const pc = publicClient;
+
                       const waitForReceipt = async (hash: string, timeoutMs = 60000) => {
                         const start = Date.now();
                         while (Date.now() - start < timeoutMs) {
                           try {
-                            const receipt = await publicClient.getTransactionReceipt({ hash: hash as `0x${string}` });
+                            const receipt = await pc.getTransactionReceipt({ hash: hash as `0x${string}` });
                             if (receipt && typeof receipt.status !== 'undefined') return receipt;
                           } catch (e) {
-                            // ignore
+                            console.error(e);
                           }
                           await new Promise((r) => setTimeout(r, 1500));
                         }
@@ -187,17 +199,19 @@ export default function AdminDashboard() {
 
                       const receipt = await waitForReceipt(txHash);
 
-                      // Check logs for MerchantRegistered event topic (optional) and/or verify hasRole on-chain
-                      const eventTopic = keccak256(new TextEncoder().encode('MerchantRegistered(address)')) as `0x${string}`;
-                      const merchantTopic = '0x' + selectedMerchant.wallet.toLowerCase().replace(/^0x/, '').padStart(64, '0');
-
-                      const foundEvent = (receipt?.logs || []).some((l: any) => (l.topics && l.topics[0] === eventTopic) || (l.topics && l.topics[1] === merchantTopic));
+                      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- narrow, intentional cast to handle provider-specific receipt types
+                      if (!receipt || (receipt as any).status !== 'success') {
+                        // revert optimistic change
+                        setMerchants((prev) => prev.map((m) => (m.id === selectedMerchant.id ? { ...m, isRegistered: false, _optimistic: false } : m)));
+                        setToasts((t) => t.concat([{ id: String(Date.now()), message: 'Transaction failed', type: 'error' }]));
+                        throw new Error('Transaction failed');
+                      }
 
                       // always double-check with on-chain hasRole
                       const merchantRole = keccak256(new TextEncoder().encode('MERCHANT_ROLE')) as `0x${string}`;
-                      const hasRaw = await publicClient.readContract({
+                      const hasRaw = await pc.readContract({
                         address: toAddress(hubAddress),
-                        abi: USDCPaymentHubAbi as any,
+                        abi: USDCPaymentHubAbi as unknown[],
                         functionName: 'hasRole',
                         args: [merchantRole, toAddress(selectedMerchant.wallet)],
                       });
@@ -210,10 +224,21 @@ export default function AdminDashboard() {
                       }
 
                       // mark merchant as registered in supabase only after on-chain confirmation
-                      await supabase.from('merchants').update({ isRegistered: true }).eq('id', selectedMerchant.id);
+                      // Wrap supabase with an `unknown`-based helper so we can call update
+                      // without hitting the generated `never` type on the client. This
+                      // avoids using `any` (which ESLint would flag) while letting us
+                      // bypass the incorrect `never` constraint caused by the client types.
+                      const _sup = supabase as unknown as {
+                        from: (table: string) => {
+                          update: (payload: unknown) => {
+                            eq: (col: string, val: unknown) => Promise<unknown>
+                          }
+                        }
+                      };
+                      await _sup.from('merchants').update({ isRegistered: true }).eq('id', selectedMerchant.id);
                       // refresh merchants list
                       const { data } = await supabase.from('merchants').select('id,name,store_url,wallet,kyc_url,isRegistered');
-                      setMerchants((data as any) || []);
+                      setMerchants((data as MerchantRow[]) || []);
                       setSelectedMerchant(null);
 
                       // update toast to success

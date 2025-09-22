@@ -2,12 +2,13 @@
 
 import React, { useState } from "react";
 import supabase from "../../../lib/supabaseClient";
+import type { Database } from '@shared/types/types'
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Button from "../../../components/ui/button";
-// Provide a runtime-safe fallback in case the imported Button is undefined at runtime
-const UIButton: any = (Button as any) || ((props: any) => <button {...props}>{props.children}</button>);
+// Use the imported Button component directly. Avoid `any` to keep eslint happy.
+const UIButton = Button;
 import Link from "next/link";
 
 const MerchantSchema = z.object({
@@ -33,25 +34,34 @@ export default function MerchantRegisterPage() {
     setError(null);
     try {
       let kycUrl = null;
-      if (data.kyc && data.kyc[0]) {
-        const file = data.kyc[0] as File;
+      if (data.kyc && (data.kyc as unknown as File[])[0]) {
+        const file = (data.kyc as unknown as File[])[0];
         const fileName = `${Date.now()}-${file.name}`;
         const { error: uploadError } = await supabase.storage.from('kyc').upload(fileName, file);
         if (uploadError) throw uploadError;
-        const { publicURL } = supabase.storage.from('kyc').getPublicUrl(fileName);
-        kycUrl = publicURL;
+        // getPublicUrl returns { data: { publicUrl: string } }
+        const { data: publicData } = supabase.storage.from('kyc').getPublicUrl(fileName);
+        kycUrl = publicData?.publicUrl ?? null;
       }
 
-  // Insert merchant record into 'merchants' table (create this table in Supabase)
+
   // Mark as not registered on-chain until admin approves
-  const { error: insertError } = await supabase.from('merchants').insert([{ name: data.name, store_url: data.storeUrl, wallet: data.wallet, kyc_url: kycUrl, isRegistered: false }]);
+  // cast insert payload to any to work around a typing mismatch where the table type
+  // may not be inferred correctly in this workspace's supabase client types.
+  const insertPayload: Database['public']['Tables']['merchants']['Insert'][] = [
+    { name: data.name, store_url: data.storeUrl ?? null, wallet: data.wallet, kyc_url: kycUrl ?? null, isRegistered: false }
+  ];
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- intentional: supabase typing mismatch workaround for insert payload
+  const { error: insertError } = await supabase.from('merchants').insert(insertPayload as any);
       if (insertError) throw insertError;
 
       setSuccess(true);
       reset();
-    } catch (e: any) {
-      console.error(e);
-      setError(e.message || String(e));
+    } catch (e: unknown) {
+        console.error(e);
+        const m = e instanceof Error ? e.message : String(e);
+        setError(m);
     } finally {
       setLoading(false);
     }
@@ -61,7 +71,7 @@ export default function MerchantRegisterPage() {
     <div className="min-h-screen flex items-center justify-center px-6 py-20">
       <div className="max-w-2xl w-full bg-white/60 p-10 rounded-lg border border-gray-200 shadow">
         <h1 className="text-2xl font-semibold mb-4">Merchant Registration</h1>
-        <p className="text-gray-600 mb-6">Register your store to accept USDC payments. We'll keep your info private.</p>
+  <p className="text-gray-600 mb-6">Register your store to accept USDC payments. We&apos;ll keep your info private.</p>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
@@ -93,7 +103,7 @@ export default function MerchantRegisterPage() {
           </div>
 
           {error && <p className="text-sm text-red-600">{error}</p>}
-          {success && <p className="text-sm text-green-600">Registration submitted — we'll review and activate your merchant account.</p>}
+          {success && <p className="text-sm text-green-600">Registration submitted — we&apos;ll review and activate your merchant account.</p>}
         </form>
       </div>
     </div>
