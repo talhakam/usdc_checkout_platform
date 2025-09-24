@@ -80,12 +80,12 @@ export default function AdminDashboard() {
         {/* Toasts */}
         <div className="fixed top-6 right-6 z-50 flex flex-col gap-2">
           {toasts.map((t) => (
-            <div key={t.id} className={"px-4 py-2 rounded shadow-md " + (t.type === 'success' ? 'bg-green-50 text-green-800' : t.type === 'error' ? 'bg-red-50 text-red-800' : 'bg-blue-50 text-blue-800')}>{t.message}</div>
+            <div key={t.id} className={"px-4 py-2 rounded shadow-md " + (t.type === 'success' ? 'bg-green-900 text-green-200 border border-border' : t.type === 'error' ? 'bg-red-900 text-red-200 border border-border' : 'bg-blue-900 text-blue-200 border border-border')}>{t.message}</div>
           ))}
         </div>
         <header className="mb-8">
           <h1 className="text-3xl font-semibold">Admin Dashboard</h1>
-          <p className="text-gray-600 mt-2">Admin tools for managing the platform and contracts.</p>
+          <p className="text-muted mt-2">Admin tools for managing the platform and contracts.</p>
         </header>
 
         <section className="grid grid-cols-1 md:grid-cols-3 gap-6">

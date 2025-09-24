@@ -15,9 +15,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
   const base = "inline-flex items-center justify-center rounded-lg font-semibold transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed";
 
   const variantClasses: Record<string, string> = {
-    primary: tone === "dark" ? "bg-gradient-to-r from-blue-600 to-sky-500 text-white shadow-md hover:brightness-105" : "bg-white text-blue-600 border",
-    secondary: "bg-white/80 text-gray-900 border border-gray-200 hover:bg-white",
-    ghost: "bg-transparent text-gray-700",
+    primary: tone === "dark" ? "bg-gradient-to-r from-blue-600 to-sky-500 text-white shadow-md hover:brightness-105" : "bg-surface text-foreground border",
+    secondary: "bg-surface/80 text-foreground border border-border hover:bg-surface/90",
+    ghost: "bg-transparent text-muted",
   };
 
   const sizes: Record<string, string> = {

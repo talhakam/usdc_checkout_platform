@@ -69,26 +69,26 @@ export default function MerchantRegisterPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-6 py-20">
-      <div className="max-w-2xl w-full bg-white/60 p-10 rounded-lg border border-gray-200 shadow">
+      <div className="max-w-2xl w-full bg-surface/60 p-10 rounded-lg border border-border shadow">
         <h1 className="text-2xl font-semibold mb-4">Merchant Registration</h1>
-  <p className="text-gray-600 mb-6">Register your store to accept USDC payments. We&apos;ll keep your info private.</p>
+  <p className="text-muted mb-6">Register your store to accept USDC payments. We&apos;ll keep your info private.</p>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
             <label className="block text-sm font-medium mb-1">Name</label>
-            <input {...register('name')} className="w-full p-2 border rounded" />
+            <input {...register('name')} className="w-full p-2 border rounded text-black" />
             {errors.name && <p className="text-sm text-red-600">{String(errors.name.message)}</p>}
           </div>
 
           <div>
             <label className="block text-sm font-medium mb-1">Store URL</label>
-            <input {...register('storeUrl')} className="w-full p-2 border rounded" />
+            <input {...register('storeUrl')} className="w-full p-2 border rounded text-black" />
             {errors.storeUrl && <p className="text-sm text-red-600">{String(errors.storeUrl.message)}</p>}
           </div>
 
           <div>
             <label className="block text-sm font-medium mb-1">Wallet</label>
-            <input {...register('wallet')} className="w-full p-2 border rounded" />
+            <input {...register('wallet')} className="w-full p-2 border rounded text-black" />
             {errors.wallet && <p className="text-sm text-red-600">{String(errors.wallet.message)}</p>}
           </div>
 

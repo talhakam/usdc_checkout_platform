@@ -10,14 +10,14 @@ import { Store, CreditCard, Zap } from "lucide-react";
 
 export default function Landing() {
   return (
-    <section className="min-h-screen flex items-center justify-center bg-gradient-to-b from-sky-50 to-white">
+    <section className="min-h-screen flex items-center justify-center bg-gradient-to-b from-slate-900 to-background">
       <Container>
         <div className="max-w-4xl mx-auto text-center py-20">
           <div className="mb-12">
             <h1 className="text-5xl md:text-6xl mb-6 font-extrabold tracking-tight">
-              Accept <span className="text-gradient bg-clip-text text-blue-600">USDC</span> Payments
+              Accept <span className="text-gradient bg-clip-text text-blue-400">USDC</span> Payments
             </h1>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-lg text-muted max-w-2xl mx-auto">
               Seamless crypto checkout experience with instant rewards. Transform your business with web3 payments in minutes.
             </p>
           </div>

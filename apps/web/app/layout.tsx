@@ -4,11 +4,6 @@ import "./globals.css";
 import Providers from "./providers";
 import "@rainbow-me/rainbowkit/styles.css";
 import Header from "../components/Header";
-import dynamic from "next/dynamic";
-
-// load the wallet connect button only on the client to avoid injecting
-// runtime styles into server-rendered markup (prevents hydration mismatch)
-const WalletConnectButton = dynamic(() => import("../components/WalletConnectButton"), { ssr: false });
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -33,13 +28,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        {/* Wrap the whole app in Providers so Wagmi/RainbowKit context is available throughout */}
+      {/* Force dark mode site-wide by adding the `dark` class to the body */}
+      <body className={`dark ${geistSans.variable} ${geistMono.variable} antialiased`}>
+        {/* Mount client-side providers and render Header inside them so RainbowKit's ConnectButton
+            has provider context when it mounts. */}
         <Providers>
-          <Header>
-            <WalletConnectButton />
-          </Header>
-
+          <Header />
           {children}
         </Providers>
       </body>

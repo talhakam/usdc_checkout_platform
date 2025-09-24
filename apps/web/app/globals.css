@@ -3,16 +3,14 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Default to dark theme across the site */
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --surface: #0f1113;
+  --muted: #9aa0a6;
+  --border: #1f2326;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
 
 body {
   color: var(--foreground);
@@ -24,4 +22,18 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+/* Global overrides to neutralize light utility classes (helps with third-party CSS and stale build artifacts) */
+.bg-white, .bg-white\/60, .bg-white\/80, .to-white, .hover\:bg-white:hover {
+  background-color: var(--surface) !important;
+}
+.border-gray-200, .border-gray-200\:\:before {
+  border-color: var(--border) !important;
+}
+.text-gray-600, .text-gray-500, .text-gray-800, .text-gray-900 {
+  color: var(--foreground) !important;
+}
+.bg-blue-50, .bg-green-50, .bg-red-50 {
+  background-color: rgba(255,255,255,0.02) !important;
 }

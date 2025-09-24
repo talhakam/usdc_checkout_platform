@@ -1,4 +1,6 @@
 import { http, createConfig } from "wagmi";
+import { Chain } from 'viem';
+
 
 // ENV for Polygon Amoy
 const AMOY_RPC =
@@ -34,7 +36,7 @@ const polygonAmoy = {
 } as const;
 
 // Chains we support
-export const chains = [localhost, polygonAmoy] as const;
+export const chains = AMOY_RPC ? [polygonAmoy] as const : [localhost] as const;
 
 // Transport mapping (use any for typing to avoid depending on wagmi's exact exported types)
 export const transports: Record<number, any> = { // eslint-disable-line @typescript-eslint/no-explicit-any -- wagmi typing mismatch workaround
@@ -46,6 +48,7 @@ if (AMOY_RPC) {
 
 
 export const config = createConfig({
-  chains: chains as unknown as readonly [any, ...any[]], // eslint-disable-line @typescript-eslint/no-explicit-any -- wagmi typing mismatch workaround
-  transports: transports as any,
+  chains: chains as unknown as readonly [Chain, ...Chain[]], 
+  transports: transports as any, // eslint-disable-line @typescript-eslint/no-explicit-any -- wagmi typing mismatch workaround
+  ssr: true, 
 });
