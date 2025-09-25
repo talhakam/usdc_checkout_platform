@@ -88,9 +88,10 @@ export default function AdminDashboard() {
       await (walletClient as unknown as { writeContract: (args: unknown) => Promise<unknown> }).writeContract({ address: toAddress(deployments.MockUSDC), abi: [faucetAbi as unknown as object], functionName: "faucet", args: [toAddress(to), amt], chain: null });
       alert(`Faucet minted ${mintAmount} USDC to ${to}`);
     } catch (e: unknown) {
-      // try to extract useful RPC / provider error details (MetaMask/Alchemy/Geth vary)
-      console.error('mint error raw', e);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- provider error typing
+    // try to extract useful RPC / provider error details (MetaMask/Alchemy/Geth vary)
+    console.error('mint error raw', e);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- provider error typing
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- we only read fields for reporting
   const err = e as any;
       const details = err?.data || err?.error || err?.body || err?.message || err?.reason || err?.toString?.();
       const pretty = typeof details === 'string' ? details : JSON.stringify(details, null, 2);

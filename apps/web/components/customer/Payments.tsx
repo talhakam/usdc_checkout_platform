@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Modal from "../ui/Modal";
 import { createClient } from "../../lib/database/createClientComponent";
 import { useWalletClient, useWatchContractEvent } from "wagmi";
@@ -103,8 +103,9 @@ export default function Payments({ payments, consumerAddress }: Props) {
       }
 
       // send the on-chain requestRefund transaction from the consumer wallet
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- walletClient typing varies at runtime
-      await (walletClient as any).writeContract({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- walletClient typing varies at runtime
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call -- writeContract is runtime-provided by wallet
+  await (walletClient as any).writeContract({
         address: hubAddress as `0x${string}`,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any -- ABI fragment, safe to cast
         abi: USDCPaymentHubAbi as any,

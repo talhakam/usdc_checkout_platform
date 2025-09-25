@@ -6,7 +6,6 @@ import Modal from "../ui/Modal";
 import { createClient } from "../../lib/database/createClientComponent";
 import { useAccount, useWalletClient, useWatchContractEvent } from "wagmi";
 import { USDCPaymentHubAbi, MockUSDCAbi } from "../../src/abis/contracts";
-import { parseUnits } from "viem";
 
 const supabase = createClient();
 
