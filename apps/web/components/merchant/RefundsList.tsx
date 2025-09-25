@@ -54,8 +54,9 @@ export default function RefundsList() {
 
   // watch RefundIssued events and react when the matching paymentId is emitted
   useWatchContractEvent({
-    address: hubAddress as `0x${string}`,
-    abi: USDCPaymentHubAbi as any,
+  address: hubAddress as `0x${string}`,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- ABI fragment, safe to cast
+  abi: USDCPaymentHubAbi as any,
     eventName: 'RefundIssued',
     args: {
         0: awaitingPaymentId as `0x${string}` | undefined
@@ -70,6 +71,7 @@ export default function RefundsList() {
                 // try to read paymentId from parsed args, fallback to topics (indexed)
                 let paymentId: string | undefined;
                 try {
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- log shape varies by provider
                   const anyLog = l as any;
                   if (anyLog.args) {
                     paymentId = anyLog.args[0] ?? anyLog.args.paymentId;
@@ -126,8 +128,10 @@ export default function RefundsList() {
 
       try {
         // call approve from merchant wallet — this will prompt the wallet to approve
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- walletClient typing varies at runtime
         await (walletClient as any).writeContract({
           address: mockAddress as `0x${string}`,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any -- ABI fragment, safe to cast
           abi: MockUSDCAbi as any,
           functionName: 'approve',
           args: [hubAddress as `0x${string}`, amountUnits]
@@ -140,8 +144,10 @@ export default function RefundsList() {
       }
 
       // Now call merchantRefund on the hub
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- walletClient typing varies at runtime
       await (walletClient as any).writeContract({
         address: hubAddress as `0x${string}`,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- ABI fragment, safe to cast
         abi: USDCPaymentHubAbi as any,
         functionName: 'merchantRefund',
         args: [selected.payment_id as `0x${string}`, amountUnits]

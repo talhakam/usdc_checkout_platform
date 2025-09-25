@@ -90,7 +90,8 @@ export default function AdminDashboard() {
     } catch (e: unknown) {
       // try to extract useful RPC / provider error details (MetaMask/Alchemy/Geth vary)
       console.error('mint error raw', e);
-      const err = e as any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- provider error typing
+  const err = e as any;
       const details = err?.data || err?.error || err?.body || err?.message || err?.reason || err?.toString?.();
       const pretty = typeof details === 'string' ? details : JSON.stringify(details, null, 2);
       alert("mint failed: " + pretty);
@@ -223,6 +224,7 @@ export default function AdminDashboard() {
                       const receipt = await waitForReceipt(txHash);
 
                       // eslint-disable-next-line @typescript-eslint/no-explicit-any -- narrow, intentional cast to handle provider-specific receipt types
+                      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- receipt shape is provider-specific
                       if (!receipt || (receipt as any).status !== 'success') {
                         // revert optimistic change
                         setMerchants((prev) => prev.map((m) => (m.id === selectedMerchant.id ? { ...m, isRegistered: false, _optimistic: false } : m)));

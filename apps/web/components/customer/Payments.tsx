@@ -52,6 +52,7 @@ export default function Payments({ payments, consumerAddress }: Props) {
   // Watch RefundRequested events and insert into Supabase once emitted
   useWatchContractEvent({
     address: hubAddress as `0x${string}`,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- ABI fragment, safe to cast
     abi: USDCPaymentHubAbi as any,
     eventName: 'RefundRequested',
     args: {
@@ -61,7 +62,7 @@ export default function Payments({ payments, consumerAddress }: Props) {
       console.log('RefundRequested logs', logs);
       if (logs && logs.length > 0) {
         // insert into supabase if not present
-        (async () => {
+          (async () => {
           try {
             const pid = awaitingPaymentId as string;
             if (!pid || !consumerAddress) return;
@@ -102,8 +103,10 @@ export default function Payments({ payments, consumerAddress }: Props) {
       }
 
       // send the on-chain requestRefund transaction from the consumer wallet
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- walletClient typing varies at runtime
       await (walletClient as any).writeContract({
         address: hubAddress as `0x${string}`,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- ABI fragment, safe to cast
         abi: USDCPaymentHubAbi as any,
         functionName: 'requestRefund',
         args: [selectedPayment.payment_id as `0x${string}`, refundReason]
@@ -114,7 +117,8 @@ export default function Payments({ payments, consumerAddress }: Props) {
       setMsg('Waiting for on-chain confirmation...');
     } catch (e) {
       console.error('sendRefundRequest error', e);
-      setMsg('Failed to send on-chain refund request: ' + ((e as any)?.message || String(e)));
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- error is provider-specific
+  setMsg('Failed to send on-chain refund request: ' + ((e as any)?.message || String(e)));
     } finally {
       setSendingRefund(false);
     }

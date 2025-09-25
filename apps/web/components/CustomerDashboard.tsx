@@ -73,6 +73,7 @@ export default function CustomerDashboard() {
 
   useWatchContractEvent({
     address: hubAddress as `0x${string}`,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- ABI fragment, safe to cast
     abi: USDCPaymentHubAbi as any,
     eventName: 'PaymentProcessed',
     args: {
@@ -108,6 +109,7 @@ export default function CustomerDashboard() {
   const hubAddr = hubAddress;
 
       // approve
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- ABI fragment, safe to cast
       await (walletClient as unknown as { writeContract: (...args: unknown[]) => Promise<unknown> }).writeContract({
         address: mockAddress as `0x${string}`,
         abi: MockUSDCAbi as any,
@@ -117,6 +119,7 @@ export default function CustomerDashboard() {
 
       // checkout
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- ABI fragment, safe to cast
       await (walletClient as unknown as { writeContract: (...args: unknown[]) => Promise<unknown> }).writeContract({
         address: hubAddr as `0x${string}`,
         abi: USDCPaymentHubAbi as any,
@@ -139,7 +142,8 @@ export default function CustomerDashboard() {
       setCheckoutOpen(false);
     } catch (e) {
       console.error(e);
-      alert((e as any)?.message || 'Checkout failed');
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- provider error typing
+  alert((e as any)?.message || 'Checkout failed');
     } finally {
       setLoading(false);
     }
