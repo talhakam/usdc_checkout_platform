@@ -92,7 +92,7 @@ export default function AdminDashboard() {
     console.error('mint error raw', e);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any -- provider error typing
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- we only read fields for reporting
-  const err = e as any;
+  const err = e as unknown as { data?: any; error?: any; body?: any; message?: string; reason?: string; toString?: () => string };
       const details = err?.data || err?.error || err?.body || err?.message || err?.reason || err?.toString?.();
       const pretty = typeof details === 'string' ? details : JSON.stringify(details, null, 2);
       alert("mint failed: " + pretty);

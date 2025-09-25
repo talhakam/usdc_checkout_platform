@@ -9,7 +9,7 @@ import RefundsList from "./customer/RefundsList";
 import { createClient } from "../lib/database/createClientComponent";
 import { useAccount, useWalletClient, useBalance, useWatchContractEvent } from "wagmi";
 import { MockUSDCAbi, USDCPaymentHubAbi } from "../src/abis/contracts";
-import { keccak256, parseUnits } from "viem";
+import { keccak256 } from "viem";
 
 const supabase = createClient();
 
@@ -112,7 +112,7 @@ export default function CustomerDashboard() {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any -- ABI fragment, safe to cast
       await (walletClient as unknown as { writeContract: (...args: unknown[]) => Promise<unknown> }).writeContract({
         address: mockAddress as `0x${string}`,
-        abi: MockUSDCAbi as any,
+        abi: MockUSDCAbi as any, // eslint-disable-line @typescript-eslint/no-explicit-any -- ABI fragment, safe to cast
         functionName: 'approve',
         args: [hubAddr as `0x${string}`, amount]
       });
@@ -122,7 +122,7 @@ export default function CustomerDashboard() {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any -- ABI fragment, safe to cast
       await (walletClient as unknown as { writeContract: (...args: unknown[]) => Promise<unknown> }).writeContract({
         address: hubAddr as `0x${string}`,
-        abi: USDCPaymentHubAbi as any,
+        abi: USDCPaymentHubAbi as any, // eslint-disable-line @typescript-eslint/no-explicit-any -- ABI fragment, safe to cast
         functionName: 'checkout',
         args: [paymentId as `0x${string}`, selectedMerchant.wallet as `0x${string}`, amount]
       });
