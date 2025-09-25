@@ -1,11 +1,86 @@
 // Centralized ABI exports for frontend components.
-// These import the Hardhat artifacts from the `packages/contracts` build output.
-// Importing JSON artifacts is allowed via `resolveJsonModule` in tsconfig.
-import USDCPaymentHubArtifact from '../../../../packages/contracts/artifacts/contracts/USDCPaymentHub.sol/USDCPaymentHub.json';
-import MockUSDCArtifact from '../../../../packages/contracts/artifacts/contracts/MockUSDC.sol/MockUSDC.json';
+// Try to load Hardhat artifact JSON files from the monorepo's `packages/contracts/artifacts`.
+// On CI (like Vercel) those artifacts may not be present; in that case we export empty ABIs
+// so the build doesn't fail. Runtime code should handle missing ABI fragments gracefully.
+// Minimal, client-friendly ABI fragments for the functions the frontend uses.
+// These are intentionally small and inlined so the bundle doesn't try to include
+// server-only modules (fs/path) or require artifacts that may not exist on CI.
+export const USDCPaymentHubAbi = [
+  // hasRole(bytes32,address) -> bool
+  {
+    "inputs": [
+      { "internalType": "bytes32", "name": "role", "type": "bytes32" },
+      { "internalType": "address", "name": "account", "type": "address" }
+    ],
+    "name": "hasRole",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  // registerMerchant(address)
+  {
+    "inputs": [{ "internalType": "address", "name": "merchant", "type": "address" }],
+    "name": "registerMerchant",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  // merchantRefund(bytes32,uint256)
+  {
+    "inputs": [
+      { "internalType": "bytes32", "name": "paymentId", "type": "bytes32" },
+      { "internalType": "uint256", "name": "amount", "type": "uint256" }
+    ],
+    "name": "merchantRefund",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+];
 
-export const USDCPaymentHubAbi = USDCPaymentHubArtifact.abi as unknown[];
-export const MockUSDCAbi = MockUSDCArtifact.abi as unknown[];
+export const MockUSDCAbi = [
+  // faucet(address,uint256)
+  {
+    "inputs": [
+      { "internalType": "address", "name": "to", "type": "address" },
+      { "internalType": "uint256", "name": "amount", "type": "uint256" }
+    ],
+    "name": "faucet",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  // decimals() -> uint8
+  {
+    "inputs": [],
+    "name": "decimals",
+    "outputs": [{ "internalType": "uint8", "name": "", "type": "uint8" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  // approve(address,uint256)
+  {
+    "inputs": [
+      { "internalType": "address", "name": "spender", "type": "address" },
+      { "internalType": "uint256", "name": "amount", "type": "uint256" }
+    ],
+    "name": "approve",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  // allowance(address,address) -> uint256
+  {
+    "inputs": [
+      { "internalType": "address", "name": "owner", "type": "address" },
+      { "internalType": "address", "name": "spender", "type": "address" }
+    ],
+    "name": "allowance",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  }
+];
 
 // Convenience named fragments (optional) - components can still pass the full ABI
 const abiBundle = {
