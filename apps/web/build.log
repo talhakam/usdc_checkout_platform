@@ -1,0 +1,209 @@
+
+> web@0.1.0 build C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\apps\web
+> next build
+
+  ▲ Next.js 14.2.32
+  - Environments: .env.local
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/9) ...
+   Generating static pages (2/9) 
+   Generating static pages (4/9) 
+q [WagmiProviderNotFoundError]: `useConfig` must be used within `WagmiProvider`.
+
+Docs: https://wagmi.sh/react/api/WagmiProvider.html
+Version: wagmi@2.17.1
+    at $ (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\apps\web\.next\server\chunks\3187.js:1509:6196)
+    at C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\apps\web\.next\server\chunks\3187.js:1509:135876
+    at n8 (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\apps\web\.next\server\chunks\3187.js:1509:136236)
+    at C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\apps\web\.next\server\chunks\3187.js:1509:145516
+    at ay (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\apps\web\.next\server\chunks\3187.js:1509:145670)
+    at nj (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\node_modules\.pnpm\next@14.2.32_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:46252)
+    at nM (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\node_modules\.pnpm\next@14.2.32_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:47572)
+    at nN (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\node_modules\.pnpm\next@14.2.32_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:64547)
+    at nM (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\node_modules\.pnpm\next@14.2.32_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:61157)
+    at nN (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\node_modules\.pnpm\next@14.2.32_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:64547) {
+  details: undefined,
+  docsPath: '/api/WagmiProvider',
+  metaMessages: undefined,
+  shortMessage: '`useConfig` must be used within `WagmiProvider`.',
+  digest: '3359095445'
+}
+
+Error occurred prerendering page "/". Read more: https://nextjs.org/docs/messages/prerender-error
+
+WagmiProviderNotFoundError: `useConfig` must be used within `WagmiProvider`.
+
+Docs: https://wagmi.sh/react/api/WagmiProvider.html
+Version: wagmi@2.17.1
+    at $ (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\apps\web\.next\server\chunks\3187.js:1509:6196)
+    at C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\apps\web\.next\server\chunks\3187.js:1509:135876
+    at n8 (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\apps\web\.next\server\chunks\3187.js:1509:136236)
+    at C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\apps\web\.next\server\chunks\3187.js:1509:145516
+    at ay (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\apps\web\.next\server\chunks\3187.js:1509:145670)
+    at nj (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\node_modules\.pnpm\next@14.2.32_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:46252)
+    at nM (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\node_modules\.pnpm\next@14.2.32_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:47572)
+    at nN (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\node_modules\.pnpm\next@14.2.32_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:64547)
+    at nM (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\node_modules\.pnpm\next@14.2.32_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:61157)
+    at nN (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\node_modules\.pnpm\next@14.2.32_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:64547)
+q [WagmiProviderNotFoundError]: `useConfig` must be used within `WagmiProvider`.
+
+Docs: https://wagmi.sh/react/api/WagmiProvider.html
+Version: wagmi@2.17.1
+    at $ (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\apps\web\.next\server\chunks\3187.js:1509:6196)
+    at C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\apps\web\.next\server\chunks\3187.js:1509:135876
+    at n8 (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\apps\web\.next\server\chunks\3187.js:1509:136236)
+    at C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\apps\web\.next\server\chunks\3187.js:1509:145516
+    at ay (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\apps\web\.next\server\chunks\3187.js:1509:145670)
+    at nj (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\node_modules\.pnpm\next@14.2.32_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:46252)
+    at nM (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\node_modules\.pnpm\next@14.2.32_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:47572)
+    at nN (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\node_modules\.pnpm\next@14.2.32_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:64547)
+    at nM (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\node_modules\.pnpm\next@14.2.32_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:61157)
+    at nN (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\node_modules\.pnpm\next@14.2.32_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:64547) {
+  details: undefined,
+  docsPath: '/api/WagmiProvider',
+  metaMessages: undefined,
+  shortMessage: '`useConfig` must be used within `WagmiProvider`.',
+  digest: '3359095445'
+}
+
+Error occurred prerendering page "/_not-found". Read more: https://nextjs.org/docs/messages/prerender-error
+
+WagmiProviderNotFoundError: `useConfig` must be used within `WagmiProvider`.
+
+Docs: https://wagmi.sh/react/api/WagmiProvider.html
+Version: wagmi@2.17.1
+    at $ (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\apps\web\.next\server\chunks\3187.js:1509:6196)
+    at C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\apps\web\.next\server\chunks\3187.js:1509:135876
+    at n8 (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\apps\web\.next\server\chunks\3187.js:1509:136236)
+    at C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\apps\web\.next\server\chunks\3187.js:1509:145516
+    at ay (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\apps\web\.next\server\chunks\3187.js:1509:145670)
+    at nj (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\node_modules\.pnpm\next@14.2.32_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:46252)
+    at nM (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\node_modules\.pnpm\next@14.2.32_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:47572)
+    at nN (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\node_modules\.pnpm\next@14.2.32_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:64547)
+    at nM (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\node_modules\.pnpm\next@14.2.32_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:61157)
+    at nN (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\node_modules\.pnpm\next@14.2.32_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:64547)
+q [WagmiProviderNotFoundError]: `useConfig` must be used within `WagmiProvider`.
+
+Docs: https://wagmi.sh/react/api/WagmiProvider.html
+Version: wagmi@2.17.1
+    at $ (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\apps\web\.next\server\chunks\3187.js:1509:6196)
+    at C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\apps\web\.next\server\chunks\3187.js:1509:135876
+    at n8 (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\apps\web\.next\server\chunks\3187.js:1509:136236)
+    at C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\apps\web\.next\server\chunks\3187.js:1509:145516
+    at ay (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\apps\web\.next\server\chunks\3187.js:1509:145670)
+    at nj (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\node_modules\.pnpm\next@14.2.32_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:46252)
+    at nM (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\node_modules\.pnpm\next@14.2.32_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:47572)
+    at nN (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\node_modules\.pnpm\next@14.2.32_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:64547)
+    at nM (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\node_modules\.pnpm\next@14.2.32_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:61157)
+    at nN (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\node_modules\.pnpm\next@14.2.32_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:64547) {
+  details: undefined,
+  docsPath: '/api/WagmiProvider',
+  metaMessages: undefined,
+  shortMessage: '`useConfig` must be used within `WagmiProvider`.',
+  digest: '3359095445'
+}
+
+Error occurred prerendering page "/customer". Read more: https://nextjs.org/docs/messages/prerender-error
+
+WagmiProviderNotFoundError: `useConfig` must be used within `WagmiProvider`.
+
+Docs: https://wagmi.sh/react/api/WagmiProvider.html
+Version: wagmi@2.17.1
+    at $ (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\apps\web\.next\server\chunks\3187.js:1509:6196)
+    at C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\apps\web\.next\server\chunks\3187.js:1509:135876
+    at n8 (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\apps\web\.next\server\chunks\3187.js:1509:136236)
+    at C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\apps\web\.next\server\chunks\3187.js:1509:145516
+    at ay (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\apps\web\.next\server\chunks\3187.js:1509:145670)
+    at nj (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\node_modules\.pnpm\next@14.2.32_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:46252)
+    at nM (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\node_modules\.pnpm\next@14.2.32_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:47572)
+    at nN (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\node_modules\.pnpm\next@14.2.32_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:64547)
+    at nM (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\node_modules\.pnpm\next@14.2.32_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:61157)
+    at nN (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\node_modules\.pnpm\next@14.2.32_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:64547)
+q [WagmiProviderNotFoundError]: `useConfig` must be used within `WagmiProvider`.
+
+Docs: https://wagmi.sh/react/api/WagmiProvider.html
+Version: wagmi@2.17.1
+    at $ (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\apps\web\.next\server\chunks\3187.js:1509:6196)
+    at C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\apps\web\.next\server\chunks\3187.js:1509:135876
+    at n8 (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\apps\web\.next\server\chunks\3187.js:1509:136236)
+    at C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\apps\web\.next\server\chunks\3187.js:1509:145516
+    at ay (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\apps\web\.next\server\chunks\3187.js:1509:145670)
+    at nj (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\node_modules\.pnpm\next@14.2.32_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:46252)
+    at nM (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\node_modules\.pnpm\next@14.2.32_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:47572)
+    at nN (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\node_modules\.pnpm\next@14.2.32_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:64547)
+    at nM (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\node_modules\.pnpm\next@14.2.32_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:61157)
+    at nN (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\node_modules\.pnpm\next@14.2.32_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:64547) {
+  details: undefined,
+  docsPath: '/api/WagmiProvider',
+  metaMessages: undefined,
+  shortMessage: '`useConfig` must be used within `WagmiProvider`.',
+  digest: '3359095445'
+}
+
+Error occurred prerendering page "/merchant/register". Read more: https://nextjs.org/docs/messages/prerender-error
+
+WagmiProviderNotFoundError: `useConfig` must be used within `WagmiProvider`.
+
+Docs: https://wagmi.sh/react/api/WagmiProvider.html
+Version: wagmi@2.17.1
+    at $ (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\apps\web\.next\server\chunks\3187.js:1509:6196)
+    at C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\apps\web\.next\server\chunks\3187.js:1509:135876
+    at n8 (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\apps\web\.next\server\chunks\3187.js:1509:136236)
+    at C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\apps\web\.next\server\chunks\3187.js:1509:145516
+    at ay (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\apps\web\.next\server\chunks\3187.js:1509:145670)
+    at nj (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\node_modules\.pnpm\next@14.2.32_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:46252)
+    at nM (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\node_modules\.pnpm\next@14.2.32_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:47572)
+    at nN (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\node_modules\.pnpm\next@14.2.32_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:64547)
+    at nM (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\node_modules\.pnpm\next@14.2.32_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:61157)
+    at nN (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\node_modules\.pnpm\next@14.2.32_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:64547)
+q [WagmiProviderNotFoundError]: `useConfig` must be used within `WagmiProvider`.
+
+Docs: https://wagmi.sh/react/api/WagmiProvider.html
+Version: wagmi@2.17.1
+    at $ (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\apps\web\.next\server\chunks\3187.js:1509:6196)
+    at C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\apps\web\.next\server\chunks\3187.js:1509:135876
+    at n8 (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\apps\web\.next\server\chunks\3187.js:1509:136236)
+    at C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\apps\web\.next\server\chunks\3187.js:1509:145516
+    at ay (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\apps\web\.next\server\chunks\3187.js:1509:145670)
+    at nj (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\node_modules\.pnpm\next@14.2.32_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:46252)
+    at nM (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\node_modules\.pnpm\next@14.2.32_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:47572)
+    at nN (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\node_modules\.pnpm\next@14.2.32_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:64547)
+    at nM (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\node_modules\.pnpm\next@14.2.32_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:61157)
+    at nN (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\node_modules\.pnpm\next@14.2.32_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:64547) {
+  details: undefined,
+  docsPath: '/api/WagmiProvider',
+  metaMessages: undefined,
+  shortMessage: '`useConfig` must be used within `WagmiProvider`.',
+  digest: '3359095445'
+}
+
+Error occurred prerendering page "/admin". Read more: https://nextjs.org/docs/messages/prerender-error
+
+WagmiProviderNotFoundError: `useConfig` must be used within `WagmiProvider`.
+
+Docs: https://wagmi.sh/react/api/WagmiProvider.html
+Version: wagmi@2.17.1
+    at $ (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\apps\web\.next\server\chunks\3187.js:1509:6196)
+    at C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\apps\web\.next\server\chunks\3187.js:1509:135876
+    at n8 (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\apps\web\.next\server\chunks\3187.js:1509:136236)
+    at C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\apps\web\.next\server\chunks\3187.js:1509:145516
+    at ay (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\apps\web\.next\server\chunks\3187.js:1509:145670)
+    at nj (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\node_modules\.pnpm\next@14.2.32_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:46252)
+    at nM (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\node_modules\.pnpm\next@14.2.32_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:47572)
+    at nN (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\node_modules\.pnpm\next@14.2.32_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:64547)
+    at nM (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\node_modules\.pnpm\next@14.2.32_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:61157)
+    at nN (C:\Users\Talha Kamran\Documents\Projects\usdc_checkout_platform\node_modules\.pnpm\next@14.2.32_@babel+core@7.28.4_react-dom@18.3.1_react@18.3.1\node_modules\next\dist\compiled\next-server\app-page.runtime.prod.js:12:64547)
+   Generating static pages (6/9) 
+ ✓ Generating static pages (9/9)
+
+> Export encountered errors on following paths:
+	/_not-found/page: /_not-found
+	/admin/page: /admin
+	/customer/page: /customer
+	/merchant/register/page: /merchant/register
+	/page: /
+ ELIFECYCLE  Command failed with exit code 1.

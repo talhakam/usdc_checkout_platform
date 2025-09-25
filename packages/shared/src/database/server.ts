@@ -16,4 +16,7 @@ export const createServiceClient = () => {
 }
 
 // Admin operations that bypass RLS (instance for performing admin tasks)
-export const adminClient = createServiceClient()
+// NOTE: do NOT create an admin client at module load time here. Consumers should
+// call `createServiceClient()` at request time to avoid executing network/credential
+// logic during build-time (Next.js collects routes at build). Exporting the factory
+// avoids accidental side-effects.

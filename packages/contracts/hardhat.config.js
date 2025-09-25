@@ -1,14 +1,31 @@
+require("dotenv").config();
 require("@nomicfoundation/hardhat-toolbox");
 
-const config = {
-  solidity: "0.8.28",
-  networks: {
-    sepolia: {
-      url: process.env.SEPOLIA_RPC_URL || "",
-      accounts: process.env.SEPOLIA_PRIVATE_KEY ? [process.env.SEPOLIA_PRIVATE_KEY] : [],
-    },
-    // Add other networks as needed
-  },
+const { PRIVATE_KEY, ALCHEMY_AMOY_URL } = process.env;
+
+const networks = {
+  hardhat: {
+    chainId: 1337
+  }
 };
 
-module.exports = config;
+// Only add when the ALCHEMY_AMOY_URL env var is set.
+if (ALCHEMY_AMOY_URL) {
+  networks.amoy = {
+    url: ALCHEMY_AMOY_URL,
+    chainId: 80002,
+    accounts: PRIVATE_KEY ? [PRIVATE_KEY] : []
+  };
+}
+
+module.exports = {
+  solidity: {
+    version: "0.8.20",
+    settings: { optimizer: { enabled: true, runs: 200 } }
+  },
+  networks,
+  etherscan: {
+    apiKey: process.env.ETHERSCAN_API_KEY
+  },
+  mocha: { timeout: 200000 }
+};

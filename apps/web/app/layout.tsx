@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import Providers from "./providers";
+import "@rainbow-me/rainbowkit/styles.css";
+import Header from "../components/Header";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -25,10 +28,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+      {/* Force dark mode site-wide by adding the `dark` class to the body */}
+      <body className={`dark ${geistSans.variable} ${geistMono.variable} antialiased`}>
+        {/* Mount client-side providers and render Header inside them so RainbowKit's ConnectButton
+            has provider context when it mounts. */}
+        <Providers>
+          <Header />
+          {children}
+        </Providers>
       </body>
     </html>
   );

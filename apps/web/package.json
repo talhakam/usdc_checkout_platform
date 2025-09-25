@@ -7,16 +7,28 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest --passWithNoTests" 
+    "test": "jest --passWithNoTests"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.2.2",
+    "@rainbow-me/rainbowkit": "2.2.8",
+    
     "@supabase/auth-helpers-nextjs": "^0.10.0",
     "@supabase/auth-helpers-react": "^0.5.0",
     "@supabase/ssr": "^0.7.0",
     "@supabase/supabase-js": "^2.57.4",
+    "@tanstack/react-query": "^5.89.0",
+    "clsx": "^2.1.1",
+    "ethers": "6.15.0",
+    "lucide-react": "^0.544.0",
     "next": "14.2.32",
-    "react": "^18",
-    "react-dom": "^18"
+    "pino-pretty": "^9.3.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-hook-form": "^7.63.0",
+    "viem": "2.37.5",
+    "wagmi": "2.17.1",
+    "zod": "^4.1.11"
   },
   "devDependencies": {
     "@types/bn.js": "^5.2.0",
