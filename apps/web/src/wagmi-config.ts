@@ -32,6 +32,9 @@ const polygonAmoy = {
     default: { http: [AMOY_RPC] },
     public: { http: [AMOY_RPC] },
   },
+  blockExplorers: {
+    default: { name: "Polygon Amoy Explorer", url: "https://amoy.polygonscan.com" },
+  },
   testnet: true,
 } as const;
 

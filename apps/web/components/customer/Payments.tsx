@@ -24,7 +24,7 @@ export default function Payments({ payments, consumerAddress }: Props) {
   const [awaitingPaymentId, setAwaitingPaymentId] = useState<string | null>(null);
 
   const hubAddress = ((typeof window !== 'undefined' ? (window as unknown as { deployments?: Record<string, string> }).deployments : undefined)?.USDCPaymentHub) ||
-    "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
+    process.env.NEXT_PUBLIC_USDCPAYMENTHUB_ADDRESS;
 
   const checkExistingRefund = async (paymentId: string) => {
     if (!consumerAddress) return false;

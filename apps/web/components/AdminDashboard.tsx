@@ -64,13 +64,36 @@ export default function AdminDashboard() {
   const mint = async () => {
     if (!deployments?.MockUSDC || !walletClient || !publicClient) return alert("Connect and ensure MockUSDC is deployed");
     try {
+      // --- pre-flight checks: ensure the connected provider (publicClient) can see the contract and is on Amoy ---
+      try {
+        const code = await publicClient.getCode({ address: toAddress(deployments.MockUSDC) as `0x${string}` });
+        if (!code || code === '0x') {
+          alert('Connected wallet RPC does not see MockUSDC at the configured address. Ensure your wallet is connected to Polygon Amoy and the correct RPC URL (Alchemy).');
+          return;
+        }
+        const chainId = await publicClient.getChainId();
+        if (chainId !== 80002) {
+          alert(`Connected wallet is on chainId ${chainId}. Please switch your wallet network to Polygon Amoy (chainId 80002).`);
+          return;
+        }
+      } catch (checkErr) {
+        console.error('pre-flight checks failed', checkErr);
+        alert('Failed to verify provider state before minting. Check console for details.');
+        return;
+      }
+
       const faucetAbi = (MockUSDCAbi as unknown[]).find((i) => (i as { name?: string })?.name === "faucet") ?? MockUSDCAbi;
       const to = mintAddress || address || toAddress("0x0000000000000000000000000000000000000000");
       const amt = parseUnits(mintAmount || "100", 6);
       await (walletClient as unknown as { writeContract: (args: unknown) => Promise<unknown> }).writeContract({ address: toAddress(deployments.MockUSDC), abi: [faucetAbi as unknown as object], functionName: "faucet", args: [toAddress(to), amt], chain: null });
       alert(`Faucet minted ${mintAmount} USDC to ${to}`);
-    } catch (e) {
-      alert("mint failed: " + String(e));
+    } catch (e: unknown) {
+      // try to extract useful RPC / provider error details (MetaMask/Alchemy/Geth vary)
+      console.error('mint error raw', e);
+      const err = e as any;
+      const details = err?.data || err?.error || err?.body || err?.message || err?.reason || err?.toString?.();
+      const pretty = typeof details === 'string' ? details : JSON.stringify(details, null, 2);
+      alert("mint failed: " + pretty);
     }
   };
 
@@ -120,9 +143,9 @@ export default function AdminDashboard() {
             <p className="text-sm text-gray-600">Mint test USDC or distribute tokens for testing.</p>
             <div className="mt-4 space-y-2">
               <label className="block text-sm text-gray-600">Recipient address</label>
-              <input value={mintAddress} onChange={(e) => setMintAddress(e.target.value)} className="w-full p-2 border rounded" placeholder="0x... (leave blank to mint to connected wallet)" />
+              <input value={mintAddress} onChange={(e) => setMintAddress(e.target.value)} className="w-full p-2 border rounded text-black" placeholder="0x... (leave blank to mint to connected wallet)" />
               <label className="block text-sm text-gray-600 mt-2">Amount</label>
-              <input value={mintAmount} onChange={(e) => setMintAmount(e.target.value)} className="w-full p-2 border rounded" />
+              <input value={mintAmount} onChange={(e) => setMintAmount(e.target.value)} className="w-full p-2 border rounded text-black" />
               <div className="mt-2">
                 <Button onClick={mint} variant="primary" size="md">Mint USDC</Button>
               </div>

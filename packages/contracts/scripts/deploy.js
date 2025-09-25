@@ -1,13 +1,13 @@
 const hre = require("hardhat");
 const fs = require("fs");
-const { ADMIN_PRIVATE_KEY } = process.env;
+const { PRIVATE_KEY } = process.env;
 
 async function main() {
   let deployer;
-  // If ADMIN_PRIVATE_KEY is provided in env, use it for all networks (local or remote).
-  if (ADMIN_PRIVATE_KEY) {
+  // If PRIVATE_KEY is provided in env, use it for all networks (local or remote).
+  if (PRIVATE_KEY) {
     const provider = hre.ethers.provider;
-    deployer = new hre.ethers.Wallet(ADMIN_PRIVATE_KEY, provider);
+    deployer = new hre.ethers.Wallet(PRIVATE_KEY, provider);
     console.log(`Using ADMIN_PRIVATE_KEY deployer: ${deployer.address} (network: ${hre.network.name})`);
   } else {
     // When running against localhost or hardhat, use the built-in accounts as fallback.

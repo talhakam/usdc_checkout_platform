@@ -15,8 +15,7 @@ export default function MerchantMetrics() {
   const [payments, setPayments] = useState<OrderRow[]>([]);
 
   // Read platform fee bps from the on-chain hub contract to compute estimated net
-  const hubAddress = ((typeof window !== 'undefined' ? (window as any).deployments : undefined)?.USDCPaymentHub) ||
-    "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
+  const hubAddress = process.env.NEXT_PUBLIC_USDCPAYMENTHUB_ADDRESS as string;
 
   const { data: feeBpsData } = useReadContract({
     address: hubAddress as `0x${string}`,
@@ -33,9 +32,7 @@ export default function MerchantMetrics() {
   }, [address]);
 
   // On-chain mock USDC balance for the connected merchant (shows token balance)
-  const mockTokenAddress =
-    ((typeof window !== 'undefined' ? (window as any).deployments : undefined)?.MockUSDC) ||
-    "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+  const mockTokenAddress = process.env.NEXT_PUBLIC_MOCKUSDC_ADDRESS as string;
 
   const { data: balanceData, isLoading: balanceLoading } = useBalance({
     address: address as `0x${string}` | undefined,

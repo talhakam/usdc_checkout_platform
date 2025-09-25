@@ -25,8 +25,7 @@ export default function RefundsList() {
   const [awaitingPaymentId, setAwaitingPaymentId] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
 
-  const hubAddress = ((typeof window !== 'undefined' ? (window as unknown as { deployments?: Record<string, string> }).deployments : undefined)?.USDCPaymentHub) ||
-    "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
+  const hubAddress = process.env.NEXT_PUBLIC_USDCPAYMENTHUB_ADDRESS as string;
 
   useEffect(() => {
     (async () => {
@@ -123,8 +122,7 @@ export default function RefundsList() {
       const amountUnits = BigInt(Math.floor(selected.refund_amount * 1_000_000 / 1.02));
 
       // First, ensure the hub is approved to pull funds from merchant wallet.
-      const mockAddress = ((typeof window !== 'undefined' ? (window as unknown as { deployments?: Record<string, string> }).deployments : undefined)?.MockUSDC) ||
-        "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+      const mockAddress = process.env.NEXT_PUBLIC_MOCKUSDC_ADDRESS as string;
 
       try {
         // call approve from merchant wallet — this will prompt the wallet to approve

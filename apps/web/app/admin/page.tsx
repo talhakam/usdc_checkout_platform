@@ -33,14 +33,14 @@ export default function AdminPage() {
 
         // Ensure the address hosts contract code
         const code = await publicClient.getCode({ address: hubAddress });
-        if (!code || code === '0x' || code === '0x0') {
+        if (!code) {
           console.error('address has no contract code', hubAddress, code);
           return setIsAdmin(false);
         }
 
         // Compute ADMIN_ROLE locally (keccak256 of the string) instead of calling the contract constant
         const encoder = new TextEncoder();
-        const adminRole = keccak256(encoder.encode('ADMIN_ROLE')) as `0x${string}`;
+        const adminRole = keccak256((encoder.encode('ADMIN_ROLE')) || encoder.encode('DEFAULT_ADMIN_ROLE')) as `0x${string}`;
         console.debug('computed adminRole', adminRole);
 
   const hasRoleAbi = Hub_hasRole ? [Hub_hasRole] : (USDCPaymentHubAbi as unknown as object[]);
