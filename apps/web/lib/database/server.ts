@@ -15,5 +15,9 @@ export const createServiceClient = () => {
   )
 }
 
-// Admin operations that bypass RLS (instance for performing admin tasks)
-export const adminClient = createServiceClient()
+
+// NOTE: Do NOT create a service client at module scope. Creating the
+// admin/service-role client during module initialization will run during
+// Next/Vercel build-time and can fail when environment variables are not
+// available. Call `createServiceClient()` inside a request handler (or
+// server-only function) instead.
